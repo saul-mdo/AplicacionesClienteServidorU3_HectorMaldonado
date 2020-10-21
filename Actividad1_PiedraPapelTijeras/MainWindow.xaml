@@ -5,14 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Actividad1_PiedraPapelTijeras"
         mc:Ignorable="d"
-        Title="PIEDRA, PAPEL O TIJERAS" Height="350" Width="430">
+        Title="PIEDRA, PAPEL O TIJERAS" WindowStartupLocation="CenterScreen" Height="350" Width="430">
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MainWindowVisible}" Value="false">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    
+    <Window.DataContext>
+        <local:Juego></local:Juego>
+    </Window.DataContext>
+    
+    
     <StackPanel Margin="30">
         <Label>Nombre:</Label>
-        <TextBox Text="Jugador"></TextBox>
+        <TextBox Text="{Binding Jugador1}"></TextBox>
 
         <GroupBox Header="¿Qué desea hacer?" Padding="15">
             <StackPanel>
-                <RadioButton x:Name="rdbCrear">Crear Partida</RadioButton>
+                <RadioButton IsChecked="True" x:Name="rdbCrear">Crear Partida</RadioButton>
                 <RadioButton x:Name="rdbUnirse">Unirse a partida</RadioButton>
                 <WrapPanel Name="ipAdversario">
                     <WrapPanel.Style>
@@ -26,11 +42,11 @@
                         </Style>
                     </WrapPanel.Style>
                     <TextBlock>IP del adversario:</TextBlock>
-                    <TextBox Width="190" Name="txtIp" Margin="10,0,10,0"></TextBox>
+                    <TextBox Width="190" Text="{Binding IP}" Name="txtIp" Margin="10,0,10,0"></TextBox>
                 </WrapPanel>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="btnIniciar" HorizontalAlignment="Center" Content="Iniciar">
+        <Button Command="{Binding IniciarCommand}" CommandParameter="{Binding ElementName=rdbCrear, Path=IsChecked}" x:Name="btnIniciar" HorizontalAlignment="Center" Content="Iniciar">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="IsEnabled" Value="False"/>
@@ -45,7 +61,7 @@
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding ElementName=rdbUnirse, Path=IsChecked}" Value="true"/>
-                                <Condition Binding="{Binding ElementName=txtIp, Path=text}" Value=""/>
+                                <Condition Binding="{Binding ElementName=txtIp, Path=Text}" Value=""/>
                             </MultiDataTrigger.Conditions>
                             <Setter Property="IsEnabled" Value="False"/>
                         </MultiDataTrigger>
@@ -54,5 +70,7 @@
                 </Style>
             </Button.Style>
         </Button>
+
+
     </StackPanel>
 </Window>
